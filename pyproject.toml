@@ -3,7 +3,7 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "appname"
+name = "appname" # name of the package / folder name in src, with spaces or dsahes replaced by underscores
 authors = [{name = "David Nevin", email = "dnevincodes@gmail.com"}]
 readme = "README.md"
 dynamic = ["version", "description"]
@@ -21,6 +21,9 @@ dependencies = [
     "Flask-Bootstrap >=3.3.7.1",
 	"pyscopg2",
 ]
+
+[tool.flit.module]
+name = "appname" # name of the package / folder name in src
 
 [projecy.urls]
 Home = "https://github.com/dnevincodes/template-python-fastapi-docker-postgres"
