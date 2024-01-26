@@ -34,8 +34,6 @@ Change 'appname' to the project name in:
 1.	`MakeFile` (migrations, migrate and run commands)
 1.	`pyproject.toml`
 
-Copy `example.env` to `.env` and update the values.
-
 ## Usage:
 
 Install pre-commit
@@ -44,7 +42,7 @@ Install pre-commit
 pre-commit install
 ```
 
-Create and edit the .env file
+Create and then edit the .env file
 
 ```bash
 cp example.env .env
