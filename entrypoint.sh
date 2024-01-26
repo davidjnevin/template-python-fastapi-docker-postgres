@@ -12,9 +12,9 @@ from psycopg2.errors import OperationalError
 
 try:
     connect(
-        dbname="${DOCKER_DB_NAME}",
-        user="${DOCKER_DB_USER}",
-        password="${DOCKER_DB_PASSWORD}",
+        dbname="${DB_NAME}",
+        user="${DB_USER}",
+        password="${DB_PASSWORD}",
     )
 except OperationalError:
     sys.exit(-1)
@@ -40,13 +40,13 @@ case $1 in
 		wait_other_containers ;\
 	 	if [ "$FASTAPI_DEBUG" = "true" ]; then
         uvicorn \
-            critique_wheel.main:app \
+            appname.main:app \
             --reload \
 			--host 0.0.0.0 \
 			--port 8000
 		else
 			uvicorn \
-				critique_wheel.main:app \
+				appname.main:app \
 				--workers 2 \
 				--host 0.0.0.0 \
 				--port 8000
@@ -54,15 +54,11 @@ case $1 in
 	;;
 	"test")
 		wait_other_containers ;\
-		pytest -q
-		;;
-	"test-fast")
-		wait_other_containers ;\
-		pytest -n 4
+	    TEST_RUN="TRUE" pytest -svvv  tests
 		;;
 	"test-last-failed")
 		wait_other_containers ;\
-		pytest --lf
+	    TEST_RUN="TRUE" pytest -svvv --lf tests
 		;;
 	"test-current")
 		wait_other_containers ;\
@@ -72,28 +68,30 @@ case $1 in
 		wait_other_containers ;\
 		pytest -vv -m current --log-cli-level=DEBUG
 		;;
-	"test-api")
+	"test-domain")
 		wait_other_containers ;\
-		pytest tests/api --log-cli-level=DEBUG
-
-		;;
-	"test-unit")
-		wait_other_containers ;\
-		pytest tests/unit --log-cli-level=DEBUG
-		;;
-	"test-e2e")
-		wait_other_containers ;\
-		pytest tests/e2e --log-cli-level=DEBUG
+		pytest tests/domain --log-cli-level=DEBUG
 		;;
 	"test-int")
 		wait_other_containers ;\
-		pytest tests/integration --log-cli-level=DEBUG
+		pytest tests/integrations --log-cli-level=DEBUG
 		;;
-	"lint")
-		isort critique_wheel tests
-		ruff check . --fix
-		ruff format .  --fix
-		mypy critique_wheel
+	"test-repos")
+		wait_other_containers ;\
+		pytest tests/repositories --log-cli-level=DEBUG
+		;;
+	"test-services")
+		wait_other_containers ;\
+		pytest tests/services --log-cli-level=DEBUG
+		;;
+	"test-uows")
+		wait_other_containers ;\
+		pytest tests/unit_of_works --log-cli-level=DEBUG
+		;;
+	"test-cov")
+		wait_other_containers ;\
+		TEST_RUN="TRUE" pytest -svvv --cov-report html --cov=src tests
+
 		;;
 	"*")
 		exec "$@"
