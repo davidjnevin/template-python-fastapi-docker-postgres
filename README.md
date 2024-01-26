@@ -42,8 +42,18 @@ curl -sL https://github.com/davidjnevin/template-python-fastapi-docker-postgres/
 ```
 Unzip the files and delete the repo.zip file.
 
+## Update the App Name to a project name of your choice
+
 Update the repo url in `pyproject.toml`.
+
+Change 'appname' and description in `src/appname/__init__.py`
+
 Change 'appname' folder to the project name.
-Change 'appname' to project name in `MakeFile` (migrations, migrate and run commands), `pyproject.toml`
+
+Change 'appname' to the project name in:
+1.	`MakeFile` (migrations, migrate and run commands)
+1.	`pyproject.toml`
 
 Copy `example.env` to `.env` and update the values.
+
+I am using a requirements.txt and requirements-dev.txt until I understand how to use `Flit` in a docker build.
