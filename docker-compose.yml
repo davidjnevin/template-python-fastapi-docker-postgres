@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  critiquewheel-app:
+    container_name: app-container
+    build:
+      dockerfile: dockerfiles/Dockerfile
+      context: .
+    env_file:
+      - ./.env
+    # command: server
+    ports:
+      - 8000:8000
+    depends_on:
+    - critiquewheel-db
+    volumes:
+      - .:/app
+      - postgres_socket:/var/run/postgresql
+
+  critiquewheel-db:
+    container_name: db-container
+    image: postgres
+    environment:
+      POSTGRES_DB: ${DOCKER_DB_NAME}
+      POSTGRES_USER: ${DOCKER_DB_USER}
+      POSTGRES_PASSWORD: ${DOCKER_DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - postgres_socket:/var/run/postgresql/
+    healthcheck:
+      test: pg_isready -q --username=$$POSTGRES_USER --dbname=$$POSTGRES_DB
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    ports:
+      - "54321:5432"
+
+volumes:
+  postgres_data:
+  postgres_socket:
