@@ -43,5 +43,7 @@ curl -sL https://github.com/davidjnevin/template-python-fastapi-docker-postgres/
 Unzip the files and delete the repo.zip file.
 
 Update the repo url in `pyproject.toml`.
-Change 'appname' folder to project name.
+Change 'appname' folder to the project name.
 Change 'appname' to project name in `MakeFile` (migrations, migrate and run commands), `pyproject.toml`
+
+Copy `example.env` to `.env` and update the values.
